@@ -1,0 +1,3 @@
+# Example of a `.gitattributes` file which reclassifies `.sql` files as SQL:
+*.sql linguist-detectable=true
+*.sql linguist-language=sql
