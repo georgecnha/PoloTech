@@ -275,28 +275,6 @@ GROUP BY 1
 ORDER BY 1;
 
 
-
--- COMANDO HAVING
-SELECT 
-	data_pedido,
-	COUNT(DISTINCT pedido_id) AS total_pedidos
-FROM sales 
-GROUP BY 1
-HAVING COUNT(DISTINCT pedido_id) > 250
-ORDER BY 1;
-
-
--- EXERCICIOS:
-
---1- Quais são as 10 marcas que lucraram acima de 1000 dolares no dia 30/11/2022?
-
-
---2- Qual a cidade que mais vendeu litros para aqueles que venderam mais do que 2000 litros de bebidas?
-
-
---3-  Qual o municipio que mais vendeu em dolares para totais menores que 15 mil dolares?
-
-
 --4- Quais as 5 marcas que tiveram os menores custos nas cidades de WATERLOO e DES MOINES?
 	
 
