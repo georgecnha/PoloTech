@@ -2,8 +2,7 @@
 
 ## BANCO DE DADOS: HAMBURGUERIA
 
-Primeiramente vamos criar as tabelas necessarios para
--- os exercícios
+Primeiramente vamos criar as tabelas necessários para os exercícios.
 
 ```sql
 
@@ -826,47 +825,104 @@ INSERT INTO delivery (pedido_id, item_id, quantidade)
 
 ```sql
 
+SELECT 
+        status.pedido_id,
+        SUM(delivery.quantidade*(cardapio.preco)) as total
+FROM status
+LEFT JOIN delivery ON delivery.pedido_id = status.pedido_id
+LEFT JOIN cardapio ON cardapio.cardapio_id = delivery.item_id
+GROUP BY 1
+ORDER BY 1;
 
 ```
 
-#### 2) Monte uma tabela com os tipo de forma de pagamento, quantidade de pedidos e valor total dos pedidos naquela forma?
+#### 2) Monte uma tabela com os tipos de forma de pagamento, quantidade de pedidos e valor total dos pedidos naquela forma?
 
 ```sql
+
+SELECT 
+    ref_forma_pgto.tipo_pagamento,
+    COUNT (DISTINCT forma_pgto.pedido_id) as qtd_pedidos,
+    SUM(delivery.quantidade*(cardapio.preco)) as total
+FROM ref_forma_pgto
+LEFT JOIN forma_pgto ON forma_pgto.pagamento_id = ref_forma_pgto.pagamento_id
+LEFT JOIN delivery ON delivery.pedido_id = forma_pgto.pedido_id
+LEFT JOIN cardapio ON cardapio.cardapio_id = delivery.item_id
+GROUP BY 1
+ORDER BY 1;
 
 
 ```
 
-#### 3) Qual q forma de pagamento que teve mais pedidos cancelados? Monte a tabela para todas as formas e ranqueie
+#### 3) Qual a forma de pagamento que teve mais pedidos cancelados? Monte a tabela para todas as formas e ranqueie
 
 ```sql
-
-
+SELECT 
+	ref_forma_pgto.tipo_pagamento, 				--nome do tipo
+	COUNT (status.pedido_id) AS qtd_cancelados 	--conta os pedidos
+FROM ref_forma_pgto
+LEFT JOIN forma_pgto ON forma_pgto.pagamento_id = ref_forma_pgto.pagamento_id
+LEFT JOIN status ON status.pedido_id = forma_pgto.pedido_id
+WHERE status.status_id=3						--ref_status.status_id=3	PEDIDO CANCELADO
+GROUP BY 1
+ORDER BY 2 DESC;
 ```
 
 #### 4)  Monte uma tabela com os itens do cardapio e a quantidade itens vendidos. (Utilize o nome do item!)
 
 ```sql
-
-
+SELECT 
+	cardapio.nome_item,
+	SUM(delivery.quantidade) as qtd_vendida
+FROM cardapio
+LEFT JOIN delivery ON delivery.item_id = cardapio.cardapio_id
+GROUP BY 1
+ORDER BY 2 DESC;
 ```
 
 #### 5) Monte uma tabela com o ranking das seções do cardapio pelo total gasto nos pedidos
 
 ```sql
-
-
+SELECT 
+	cardapio.nome_secao,
+	SUM (cardapio.preco*delivery.quantidade) as total_gasto
+FROM cardapio
+LEFT JOIN delivery ON delivery.item_id = cardapio.cardapio_id
+GROUP BY 1
+ORDER BY 2 DESC;
 ```
 
 #### 6) Monte uma tabela com os valores totais por forma de pagamento para pedidos em rota de entrega
 
 ```sql
-
-
+SELECT 
+	ref_forma_pgto.tipo_pagamento, 				--nome do tipo
+	SUM (cardapio.preco*delivery.quantidade) as total_gasto
+FROM ref_forma_pgto
+LEFT JOIN forma_pgto ON forma_pgto.pagamento_id = ref_forma_pgto.pagamento_id
+LEFT JOIN status 	   ON status.pedido_id        = forma_pgto.pedido_id
+LEFT JOIN delivery   ON delivery.pedido_id      = forma_pgto.pedido_id
+LEFT JOIN cardapio   ON cardapio.cardapio_id    = delivery.item_id
+WHERE status.status_id=2						--ref_status.status_id=2	'em rota'
+GROUP BY 1
+ORDER BY 2 DESC;
+	
 ```
 
 #### 7) Monte uma tabela onde discrimine por pedido o quanto foi gasto em cada seção do cardapio (Crie colunas com o nome das seções)
 
 ```sql
+SELECT
+	D.pedido_id,
+	sum(CASE WHEN C.nome_secao = 'Acompanhamentos' THEN D.quantidade * C.preco ELSE 0 END) AS acompanhamentos,
+	sum(CASE WHEN C.nome_secao = 'Bebidas' THEN D.quantidade * C.preco ELSE 0 END) AS bebidas,
+	sum(CASE WHEN C.nome_secao = 'Lanches' THEN D.quantidade * C.preco ELSE 0 END) AS lanches,
+	sum(CASE WHEN C.nome_secao = 'Molhos' THEN D.quantidade * C.preco ELSE 0 END) AS molhos,
+	sum(CASE WHEN C.nome_secao = 'Sobremesas' THEN D.quantidade * C.preco ELSE 0 END) AS sobremesas
+FROM delivery D
+LEFT JOIN cardapio C ON C.cardapio_id = D.item_id
+GROUP BY 1
+ORDER BY 1;
 
 
 ```
