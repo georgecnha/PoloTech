@@ -46,7 +46,7 @@ WHERE cidade LIKE '%DE%'
 
 
 -- 3) Utilizando o exercicio sobre o mercado, categorize os pedidos de acordo
---com o valor total gasto (sugira uma separaçaõ entre 6 categorias)
+--com o valor total gasto (sugira uma separação entre 6 categorias)
 SELECT
 	CASE WHEN total_pedido <= 100 THEN 'F1 - Até 100 reais'
 		 WHEN total_pedido <= 200 THEN 'F2 - 100 - 200 reais'
@@ -104,7 +104,10 @@ LEFT JOIN (SELECT
 
 
 -- GROUPING SETS
- -- BANCO DE DADOS: CORRENTISTAS
+-- Serve para os valores possam ser agregados de maneiras diferentes dentro da mesma query
+
+
+-- BANCO DE DADOS: CORRENTISTAS
 -- CONSTRUIR UMA TABELA QUE TENHA CIDADE, NOME_TRANSACAO E VALOR DA TRANSACAO
 SELECT *
 FROM correntista
@@ -150,6 +153,9 @@ ORDER BY 1, 2
 
 
 -- ROLLUP 
+-- Combina diferentes jeitos de agrupar valores escokhidos.
+
+
 SELECT
 	C.cidade,
 	B.nome_transacao,
@@ -171,7 +177,10 @@ GROUP BY ROLLUP (B.nome_transacao, C.cidade)
 ORDER BY 1, 2
 
 
--- CUBE 
+-- CUBE
+--É Semelhante ao RollUp, porém neste caso são observados primeiro os segmentos pelas categorias.
+
+ 
 SELECT
 	C.cidade,
 	B.nome_transacao,
@@ -184,6 +193,8 @@ ORDER BY 1, 2
 
 
 -- OVER PARTITION BY e FUNÇÕES DE JANELA
+-- 
+
 DROP TABLE IF EXISTS tab_wf;
 
 CREATE TABLE tab_wf AS

@@ -54,7 +54,7 @@ _Obs: Nesse exemplo o `RollUP` retorna os valores da soma de todos segmentos p
 
 ### CUBE
 
-O `CUBE` é um comando semelhante ao `RollUp`, porém neste caso são observados primeiros os segmentos pelas categorias.
+O `CUBE` é um comando semelhante ao `RollUp`, porém neste caso são observados primeiro os segmentos pelas categorias.
 
 ```sql
  SELECT 
